@@ -188,7 +188,15 @@ const translations: Record<string, TranslationString | ((...args: any[]) => Tran
   "guide.see_all_policies": {
     EN: "see all policies",
     FR: "voir toutes les politiques"
-  }
+  },
+  "policy_comparison_summary": {
+    EN: "Policy comparison summary",
+    FR: "Résumé de la comparaison des politiques"
+  },
+  "view_full_comparison": {
+    EN: "Compare all topics",
+    FR: "Comparer tous les sujets"
+  },
 };
 
 export default translations;
