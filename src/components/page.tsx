@@ -4,7 +4,7 @@ import Footer from 'components/footer'
 import { useLanguage } from 'contexts/language-context'
 
 interface PageProps {
-  title?: string,
+  title?: string | React.ReactNode,
   children: React.ReactNode,
   showHeader?: boolean,
   showFooter?: boolean,

@@ -3,7 +3,7 @@ import { useLanguage, useTranslation, LanguageSelector } from 'contexts/language
 import { Link } from './system/link';
 
 interface HeaderProps {
-  subheading?: string
+  subheading?: string | React.ReactNode
 }
 
 export default function Header ({ subheading }: HeaderProps) {
