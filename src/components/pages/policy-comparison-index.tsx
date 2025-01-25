@@ -3,6 +3,7 @@ import PolicyComparisonTable from 'components/policy_table/policy-comparison-tab
 import { useTranslation } from 'contexts/language-context'
 import Page from 'components/page'
 import * as Policy from 'data/policy'
+import { Icon } from 'components/system/icon'
 
 interface PolicyComparisonIndexParams {
   year?: string,
@@ -16,8 +17,14 @@ export default function PolicyComparisonIndex (
   const { t } = useTranslation()
   const usingFilteredTopics = Policy.loadSelectedTopics(year).length > 0;
 
+  const yearSelector =
+    <>
+      <small><Icon name="caret-down"></Icon></small>
+      {year}
+    </>;
+
   return (
-    <Page title={year}>
+    <Page title={yearSelector}>
       <section className="section">
         {
           usingFilteredTopics ?
