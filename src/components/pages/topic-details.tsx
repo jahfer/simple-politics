@@ -1,47 +1,45 @@
 import * as React from 'react'
 import Page from 'components/page'
 import { useTranslation } from 'contexts/language-context';
-import * as Policy from 'data/policy';
-import * as Util from 'support/util';
-import PolicyCell from 'components/policy_table/policy-cell';
+import PolicyComparisonSummary from 'components/policy-comparison-summary';
+import PolicyComparisonTable from 'components/policy_table/policy-comparison-table'
 
 interface TopicDetailsParams {
+  year: string;
   topic: string;
 }
 
-export default function TopicDetails ({ topic }: TopicDetailsParams) {
+export default function TopicDetails ({ year, topic }: TopicDetailsParams) {
   const { t } = useTranslation();
-  const [policyCells, setPolicyCells] = React.useState<Array<React.JSX.Element>>([]);
 
-  React.useEffect(() => {
-    let ignore = false;
+  // TODO: Track history of this page to make back/forwards work properly (also Guide history is janky too)
 
-    async function loadAll() {
-      const policies = await Policy.all();
-      if (!ignore) {
-        const policiesForTopic = policies.filter((policy) => policy.topic === topic);
-        const parties = Array.from(new Set(policiesForTopic.map((policy) => policy.party)));
-        const sortedParties = Util.shuffle(parties);
-
-        const policyCells = parties.map((party) => {
-          const partyPolicies = policiesForTopic.filter((policy) => policy.party === party)
-          return <PolicyCell party={party} topic={topic} policies={partyPolicies} key={`${party}/${topic}`} />
-        });
-
-        setPolicyCells(policyCells);
-      }
-    }
-
-    loadAll();
-    return () => { ignore = true; };
-  }, [topic]);
+  const topicMap = new Map<string, boolean>([[topic, true]]);
 
   return (
     <Page title={t(`topic.${topic}`)}>
-      <section className="section">
-        <article className="text-block text-large pb-3">
-          {policyCells}
+      <section className="section flex flex-row flex-wrap gap-3">
+        <article className="text-block flex-1">
+          <h2>{t('policy_comparison.analysis')}</h2>
+          <PolicyComparisonSummary topic={topic} year={year} />
         </article>
+
+        {/* TODO: Settings no longer work when multiple components sharing the same setting are rendered... */}
+        {/* ALSO TODO: Hide other tables under a button that un-collapses them to make them visible */}
+        <aside className="flex-2">
+          <div>
+            <h2>{t('policy_comparison_title', 2021)}</h2>
+            <PolicyComparisonTable year={"2021"} canFilterTopics={false} floatingHeader={false} selectedTopics={topicMap} hideHeader={false} />
+          </div>
+          <div>
+            <h2>{t('policy_comparison_title', 2019)}</h2>
+            <PolicyComparisonTable year={"2019"} canFilterTopics={false} floatingHeader={false} selectedTopics={topicMap} hideHeader={true} />
+          </div>
+          <div>
+            <h2>{t('policy_comparison_title', 2015)}</h2>
+            <PolicyComparisonTable year={"2015"} canFilterTopics={false} floatingHeader={false} selectedTopics={topicMap} hideHeader={true} />
+          </div>
+        </aside>
       </section>
     </Page>
   )
